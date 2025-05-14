@@ -10,10 +10,12 @@ bucket = client.bucket(bucket_name)
 
 blobs = bucket.list_blobs(prefix="faiss_index/")
 
+
+
 for blob in blobs:
     # Set local filename
-    local_path = os.path.join("faiss_index", os.path.basename(blob.name))
     os.makedirs("faiss_index", exist_ok=True)
+    local_path = os.path.join("faiss_index", os.path.basename(blob.name))
 
     # Download the file
     blob.download_to_filename(local_path)
