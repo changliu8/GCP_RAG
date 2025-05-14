@@ -41,7 +41,7 @@ pipeline {
         stage('Creating Virtual Environment'){
             steps{
                 sh "python3.8 -m venv RAG"
-                sh "source ${workspace}/GCP_RAG/RAG/bin/activate"
+                sh ". ${workspace}RAG/bin/activate"
             }
         }
         
