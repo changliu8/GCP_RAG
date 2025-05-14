@@ -2,7 +2,7 @@ pipeline {
     agent { label 'gcp-node' }
 
     environment {
-        GOOGLE_APPLICATION_CREDENTIALS = "$serious-hall-459619-j3-fec998871be2.json"
+        GOOGLE_APPLICATION_CREDENTIALS = "serious-hall-459619-j3-fec998871be2.json"
     }
     
     stages {
