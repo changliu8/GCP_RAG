@@ -28,6 +28,12 @@ pipeline {
             }
         }
 
+        stage('Pulling LLM'){
+            steps{
+                sh 'ollama pull llama3'
+            }
+        }
+
         stage('Checkout') {
             steps {
                 git url: 'https://github.com/changliu8/GCP_RAG.git', branch: 'main'
