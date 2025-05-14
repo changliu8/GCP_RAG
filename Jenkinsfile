@@ -54,7 +54,8 @@ pipeline {
         stage('Setup GCP Credential') {
             steps {
                 withCredentials([file(credentialsId: 'gcp-storage', variable: 'GCP_KEY')]) {
-                    sh 'cp %GCP_KEY% %GOOGLE_APPLICATION_CREDENTIALS%'
+                    // Copy the JSON to the workspace
+                    sh 'cp "$GCP_KEY" "$GOOGLE_APPLICATION_CREDENTIALS"'
                 }
             }
         }
