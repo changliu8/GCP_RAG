@@ -8,29 +8,27 @@ pipeline {
     stages {
         stage("Check and Install Ollama"){
             steps{
-                script{
-                    def ollamaInstalled = sh(
-                        script: 'command -v ollama >/dev/null 2>&1 && echo yes || echo no',
-                        returnStdout:true
-                    ).trim()
-                }
-
-                if(ollamaInstalled == 'yes'){
-                    echo "✅ Ollama is already installed. Skipping installtion."
-                }
-                else{
-                    echo "📦 Ollama not found. Installing..."
-                    sh '''
+                sh '''
+                    if ! command -v ollama >/dev/null 2>&1; then
+                        echo "Installing Ollama..."
                         curl -fsSL https://ollama.com/install.sh | sh
-                        echo '✅ Ollama installed successfully.'
-                    '''
-                }
+                    else
+                        echo "Ollama is already installed."
+                    fi
+                '''
             }
         }
 
         stage('Pulling LLM'){
-            steps{
-                sh 'ollama pull llama3'
+            steps {
+                sh '''
+                    if ollama list | grep -q llama3; then
+                        echo "llama3 already pulled."
+                    else
+                        echo "Pulling llama3..."
+                        ollama pull llama3
+                    fi
+                '''
             }
         }
 
@@ -42,14 +40,14 @@ pipeline {
         
         stage('Creating Virtual Environment'){
             steps{
-                sh "python -m venv RAG"
-                sh "${workspace}/RAG/Scripts/activate"
+                sh "python3.8 -m venv RAG"
+                sh "source ${workspace}/RAG/bin/activate"
             }
         }
         
         stage('Install dependencies') {
             steps {
-                sh 'python -m pip install -r requirements.txt'
+                sh 'python3.8 -m pip install -r requirements.txt'
             }
         }
 
@@ -63,13 +61,13 @@ pipeline {
         
         stage('Download files') {
             steps {
-                sh 'python download_faiss.py'
+                sh 'python3.8 download_faiss.py'
             }
         }
         
         stage("Generating answers"){
             steps{
-                sh 'python gcp_rag.py "${params.Question}"'
+                sh 'python3.8 gcp_rag.py "${params.Question}"'
             }
         }
     }
