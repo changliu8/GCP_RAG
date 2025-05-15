@@ -44,14 +44,16 @@ pipeline {
         stage('Creating Virtual Environment'){
             steps{
                 sh "python3.8 -m venv RAG"
-                sh ". ${workspace}/RAG/bin/activate"
             }
         }
         
         stage('Install dependencies') {
             steps {
-                sh 'python3.8 -m pip install --upgrade pip'
-                sh 'python3.8 -m pip install -r requirements.txt'
+                sh '''
+                    . ${workspace}/RAG/bin/activate
+                    python3.8 -m pip install --upgrade pip
+                    python3.8 -m pip install -r requirements.txt
+                '''
             }
         }
 
@@ -72,13 +74,19 @@ pipeline {
         
         stage('Download files') {
             steps {
-                sh 'python3.8 download_faiss.py'
+                sh '''
+                    . ${workspace}/RAG/bin/activate
+                    python3.8 download_faiss.py
+                '''
             }
         }
         
         stage("Generating answers"){
             steps{
-                sh 'python3.8 gcp_rag.py "$Question"'
+                sh '''
+                    . ${workspace}/RAG/bin/activate
+                    python3.8 gcp_rag.py "$Question"
+                '''
             }
         }
     }
