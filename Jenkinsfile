@@ -77,7 +77,7 @@ pipeline {
         
         stage("Generating answers"){
             steps{
-                sh 'python3.8 gcp_rag.py "${params.Question}"'
+                sh 'python3.8 gcp_rag.py "$Question"'
             }
         }
     }
