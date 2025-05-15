@@ -7,9 +7,13 @@ pipeline {
     
     parameters {
         string(name: 'Question', defaultValue: 'What is 5G?', description: 'Name of the PDF file to process')
+        booleanParam(name: 'SkipUpdate', defaultValue: false, description: 'Do you want to skip the update and generate the answer directly?')
     }
     stages {
-        stage("Check and Install Ollama"){
+        stage("Check and Install Ollama"){ 
+            when{
+                expression { return !params.SkipUpdate}
+            }
             steps{
                 sh '''
                     if ! command -v ollama >/dev/null 2>&1; then
@@ -23,6 +27,9 @@ pipeline {
         }
 
         stage('Pulling LLM'){
+            when{
+                expression { return !params.SkipUpdate}
+            }
             steps {
                 sh '''
                     if ollama list | grep -q llama3; then
@@ -36,18 +43,27 @@ pipeline {
         }
 
         stage('Checkout') {
+            when{
+                expression { return !params.SkipUpdate}
+            }
             steps {
                 git url: 'https://github.com/changliu8/GCP_RAG.git', branch: 'main'
             }
         }
         
         stage('Creating Virtual Environment'){
+            when{
+                expression { return !params.SkipUpdate}
+            }
             steps{
                 sh "python3.8 -m venv RAG"
             }
         }
         
         stage('Install dependencies') {
+            when{
+                expression { return !params.SkipUpdate}
+            }
             steps {
                 sh '''
                     . ${WORKSPACE}/RAG/bin/activate
@@ -58,6 +74,9 @@ pipeline {
         }
 
         stage('Setup GCP Credential') {
+            when{
+                expression { return !params.SkipUpdate}
+            }
             steps {
                 withCredentials([file(credentialsId: 'gcp-storage', variable: 'GCP_KEY')]) {
                     sh '''
@@ -73,6 +92,9 @@ pipeline {
         }
         
         stage('Download files') {
+            when{
+                expression { return !params.SkipUpdate}
+            }
             steps {
                 sh '''
                     . ${WORKSPACE}/RAG/bin/activate
