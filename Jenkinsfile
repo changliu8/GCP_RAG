@@ -50,7 +50,7 @@ pipeline {
         stage('Install dependencies') {
             steps {
                 sh '''
-                    . ${workspace}/RAG/bin/activate
+                    . ${WORKSPACE}/RAG/bin/activate
                     python3.8 -m pip install --upgrade pip
                     python3.8 -m pip install -r requirements.txt
                 '''
@@ -75,7 +75,7 @@ pipeline {
         stage('Download files') {
             steps {
                 sh '''
-                    . ${workspace}/RAG/bin/activate
+                    . ${WORKSPACE}/RAG/bin/activate
                     python3.8 download_faiss.py
                 '''
             }
@@ -84,7 +84,7 @@ pipeline {
         stage("Generating answers"){
             steps{
                 sh '''
-                    . ${workspace}/RAG/bin/activate
+                    . ${WORKSPACE}/RAG/bin/activate
                     python3.8 gcp_rag.py "$Question"
                 '''
             }
