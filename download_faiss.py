@@ -1,22 +1,32 @@
 from google.cloud import storage
 import os
 
-# Initialize client
+# Set your GCS bucket name and directory
+BUCKET_NAME = "gcp-rag"
+GCS_DIR = "faiss_index/"
+LOCAL_DIR = "faiss_index/"
+
+
+# Initialize GCS client
 client = storage.Client()
 
-# Reference the bucket
-bucket_name = "gcp-rag"
-bucket = client.bucket(bucket_name)
+# Get the bucket
+bucket = client.bucket(BUCKET_NAME)
 
-blobs = bucket.list_blobs(prefix="faiss_index/")
+# Create local directory if it doesn't exist
+os.makedirs(LOCAL_DIR, exist_ok=True)
 
-
-
+# List and download blobs
+blobs = bucket.list_blobs(prefix=GCS_DIR)
 for blob in blobs:
-    # Set local filename
-    os.makedirs("faiss_index", exist_ok=True)
-    local_path = os.path.join("faiss_index", os.path.basename(blob.name))
+    if blob.name.endswith("/"):
+        continue  # Skip directories
+    filename = blob.name[len(GCS_DIR):]  # Strip folder prefix
+    local_path = os.path.join(LOCAL_DIR, filename)
 
-    # Download the file
+    # Create subdirectories if needed
+    os.makedirs(os.path.dirname(local_path), exist_ok=True)
+
+    # Download file
     blob.download_to_filename(local_path)
-    print(f"Downloaded: {blob.name} to {local_path}")
+    print(f"Downloaded: {blob.name} -> {local_path}")
