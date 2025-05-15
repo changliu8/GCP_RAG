@@ -60,6 +60,7 @@ pipeline {
                         echo "Credential copied."
                     else
                         echo "Credential already exists. Skipping copy."
+                    fi
                     '''
                 }
             }
