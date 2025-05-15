@@ -53,6 +53,7 @@ pipeline {
 
         stage('Setup GCP Credential') {
             steps {
+                sh '''
                 withCredentials([file(credentialsId: 'gcp-storage', variable: 'GCP_KEY')]) {
                     if [ ! -f "$WORKSPACE/serious-hall-459619-j3-fec998871be2.json" ]; then
                         cp "$GCP_KEY" "$GOOGLE_APPLICATION_CREDENTIALS"
@@ -60,6 +61,7 @@ pipeline {
                     else
                         echo "Credential already exists. Skipping copy."
                 }
+                '''
             }
         }
         
