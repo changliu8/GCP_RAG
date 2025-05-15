@@ -50,7 +50,8 @@ pipeline {
         
         stage('Install dependencies') {
             steps {
-                sh 'python3.8 -m pip install -r requirements.txt'
+                sh 'python -m pip install --upgrade pip'
+                sh 'python -m pip install -r requirements.txt'
             }
         }
 
