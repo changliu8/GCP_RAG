@@ -5,6 +5,9 @@ pipeline {
         GOOGLE_APPLICATION_CREDENTIALS = "serious-hall-459619-j3-fec998871be2.json"
     }
     
+    parameters {
+        string(name: 'Question', defaultValue: 'What is 5G?', description: 'Name of the PDF file to process')
+    }
     stages {
         stage("Check and Install Ollama"){
             steps{
