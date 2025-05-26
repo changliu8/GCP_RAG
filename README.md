@@ -18,4 +18,4 @@
 
 Example :
 
-GCP_RAG_pipeline.png
+![Alt text](GCP_RAG_pipeline.png)
