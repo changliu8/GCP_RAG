@@ -1,22 +1,21 @@
 ## This is only for my personal note
 
-1. Create a Pub/Sub Topic:
-   gcloud pubsub topics create TOPIC_NAME
+1. Create a GCP VM:
 
-2. Create notification:
-   gsutil notification create -t my-topic -f json -e OBJECT_FINALIZE -p my-folder/ gs://my-bucket
+2. Install java 17 on the node
+   apt install openjdk-17-jdk openjdk-17-jre
 
-3. Check notification:
-   gsutil notification list gs://gcp-rag
+3. Create Public/Private Key Pair for Jenkins launch agent
+   ssh-keygen -t rsa -b 4096
 
-4. Delete Notification:
-   gcloud storage buckets notifications delete projects/\_/buckets/BUCKET_NAME/notificationConfigs/NOTIFICATION_ID
+4. Copy public key to authorized_keys under ~/.ssh
 
-5. Create notification using GCP WEB UI, this is used in Jenkins
-   https://d902-216-209-2-200.ngrok-free.app/generic-webhook-trigger/invoke?token=gcs_update_secret_123
+5. Add username and private key to Jenkins as Credential
 
-6. Execute the Jenkins Job, it takes your question as input!
+6. Luanch Agent
+
+7. Execute the Jenkins Job, it takes your question as input!
 
 Example :
 
-![Alt text](GCP_RAG_pipeline.png)
+GCP_RAG_pipeline.png
